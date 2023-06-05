@@ -17,6 +17,7 @@ int main() {
 	
 	bool flag = false;
 	Student temp;
+	std::string subject;
 	while (!flag) {
 		showMenu();
 		int choice = 0;
@@ -38,6 +39,14 @@ int main() {
 			std::cin >> name;
 			group.remove_student(name);
 			break;*/
+		case 4:
+			std::cout << group.getAverageMark();
+			break;
+		case 5:
+			std::cout << "Enter subject: ";
+			std::cin >> subject;
+			std::cout << group.getAverageMarkBySubject(subject);
+			break;
 		case 6:
 			group.printExcellent();
 			break;
