@@ -19,6 +19,29 @@ void Group::add_student(const Student& ob) {
 //	}
 //}
 
+double Group::getAverageMark() const {
+	double total = 0;
+	for (const auto& pos : students) {
+		total += pos.get_average();
+	}
+
+	return total / students.size();
+}
+
+double Group::getAverageMarkBySubject(const std::string& subject) const {
+	double total = 0;
+	
+	for (const auto& pos : students) {
+		const auto& grades = pos.get_marks();
+		auto it = grades.find(subject);
+		if (it != grades.end()) {
+			total += it->second;
+		}
+	}
+
+	return total / students.size();
+}
+
 void Group::printExcellent() const {
 	std::cout << "List of Excellent students" << std::endl;
 	for (const auto& pos : students) {
