@@ -18,12 +18,22 @@ public:
 
 	void add_discipline(Discipline ob);
 	double get_average_mark() const;
+	bool operator<(const Student& ob) const;
+
+	bool is_Excellent() const;
+	bool is_Doubler() const;
 
 	std::string get_name() const;
 	std::string get_surname() const;
 	std::string get_patronymic() const;
 	size_t get_id() const;
 	std::vector<Discipline> get_disciplines() const; 
+
+	void set_name(const std::string& name);
+	void set_surname(const std::string& surname);
+	void set_patronymic(const std::string& patronymic);
+	void set_id(const size_t id);
+	void set_discipline(const std::vector<Discipline>& disciplines);
 
 	bool operator==(const Student& s) const;
 
