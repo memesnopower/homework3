@@ -22,6 +22,28 @@ double Student::get_average_mark() const {
 	return total / disciplines.size();
 }
 
+bool Student::operator<(const Student& ob) const {
+	return this->get_average_mark() < ob.get_average_mark();
+}
+
+
+bool Student::is_Excellent() const {
+	if (get_average_mark() == 5) {
+		return true;
+	}
+	return false;
+}
+
+bool Student::is_Doubler() const {
+	for (const auto& pos : disciplines) {
+		if (pos.mark == 2) {
+			return true;
+			break;
+		}
+		return false;
+	}
+}
+
 Student::~Student() = default;
 
 
@@ -44,6 +66,26 @@ size_t Student::get_id() const {
 
 std::vector<Discipline> Student::get_disciplines() const {
 	return disciplines;
+}
+
+void Student::set_name(const std::string& name) {
+	this->name = name;
+}
+
+void Student::set_surname(const std::string& surname) {
+	this->surname = surname;
+}
+
+void Student::set_patronymic(const std::string& patronymic) {
+	this->patronymic = patronymic;
+}
+
+void Student::set_id(const size_t id) {
+	this->studentId = studentId;
+}
+
+void Student::set_discipline(const std::vector<Discipline>& disciplines) {
+	this->disciplines = disciplines;
 }
 
 bool Student::operator==(const Student& s) const {
