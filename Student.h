@@ -3,54 +3,50 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
-
-struct Discipline {
-	std::string subject;
-	size_t mark;
-};
+#include <map>
 
 class Student {
 public:
 	Student();
-	Student(std::string name, std::string surname, std::string patronymic, size_t studentId);
-	~Student();
+	Student(const std::string& name, const std::string& surname, const std::string& patronymic, const size_t id);
 
-	void add_discipline(Discipline ob);
-	double get_average_mark() const;
-	bool operator<(const Student& ob) const;
 
-	bool is_Excellent() const;
-	bool is_Doubler() const;
+	bool operator==(const Student& ob) const;
+	const std::string& get_name() const;
+	const std::string& get_surname() const;
+	const std::string& get_patronymic() const;
+	const size_t get_id() const;
+	void add_mark(const std::string& subject, size_t mark);
+	const std::map<std::string, size_t>& get_marks() const;
 
-	std::string get_name() const;
-	std::string get_surname() const;
-	std::string get_patronymic() const;
-	size_t get_id() const;
-	std::vector<Discipline> get_disciplines() const; 
+	double get_average() const;
 
-	void set_name(const std::string& name);
-	void set_surname(const std::string& surname);
-	void set_patronymic(const std::string& patronymic);
-	void set_id(const size_t id);
-	void set_discipline(const std::vector<Discipline>& disciplines);
+	bool isExcellent() const;
+	bool isDoubler() const;
 
-	bool operator==(const Student& s) const;
+	friend std::ostream& operator<<(std::ostream& os, const Student& student);
+	friend std::istream& operator>>(std::istream& is, Student& student);
 
-	friend std::ostream& operator<<(std::ostream& os, const Student& ob);
-	friend std::istream& operator>>(std::istream& is, Student& ob);
 private:
 	std::string name;
 	std::string surname;
 	std::string patronymic;
-	size_t studentId = 0;
-	std::vector<Discipline> disciplines;
+	size_t id = 0;
+	std::map<std::string, size_t> marks;
 };
 
-struct StudentHasher {
-	size_t operator()(const Student& s) const {
-		return std::hash<std::string>()(s.get_name()) ^ std::hash<int>()(s.get_id());
+
+struct Hasher {
+
+	std::hash<std::string> strHash;
+	std::hash<size_t> stHash;
+
+	size_t operator() (const Student& ob) const {
+		const size_t coef = 5171;
+
+		return (pow(coef, 3) * strHash(ob.get_name()) + pow(coef, 2) * strHash(ob.get_surname()) + coef * strHash(ob.get_patronymic()) + stHash(ob.get_id()));
 	}
 };
+
 
 #endif // STUDENT_H
