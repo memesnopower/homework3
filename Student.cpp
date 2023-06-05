@@ -34,6 +34,29 @@ const std::map<std::string, size_t>& Student::get_marks() const {
 }
 
 
+
+void Student::set_name(const std::string& name) {
+	this->name = name;
+}
+
+void Student::set_surname(const std::string& surname) {
+	this->surname = surname;
+}
+
+void Student::set_patronymic(const std::string& patronymic) {
+	this->patronymic = patronymic;
+}
+
+void Student::set_id(const size_t id) {
+	this->id = id;
+}
+
+void Student::set_marks(const std::map<std::string, size_t>& marks) {
+	this->marks = marks;
+}
+
+
+
 double Student::get_average() const {
 	size_t total = 0;
 	for (const auto& mark : marks) {
