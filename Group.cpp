@@ -1,4 +1,5 @@
 #include "Group.h"
+#include "Student.h"
 
 Group::Group() = default;
 
@@ -6,29 +7,61 @@ Group::Group(const std::string& group_name) {
 	this->group_name = group_name;
 }
 
-void Group::add_student(Student& ob) {
-	students.insert(ob);
+void Group::add_student(const Student& ob) {
+	this->students.insert(ob);
 }
 
-std::istream& operator>>(std::istream& is, Group& ob) {
-	std::getline(is, ob.group_name);
-	is.ignore();
+//void Group::remove_student(const std::string& name) {
+//	for (const auto& pos : students) {
+//		if (pos.get_name() == name) {
+//			students.erase(pos);
+//		}
+//	}
+//}
 
-	for (size_t i = 0; i < 2; ++i) {
-		Student temp;
-		is >> temp;
-		ob.students.insert(temp);
+void Group::printExcellent() const {
+	std::cout << "List of Excellent students" << std::endl;
+	for (const auto& pos : students) {
+		if (pos.isExcellent() == true) {
+			std::cout << pos << std::endl;
+		}
+		else {
+			std::cout << "Empty :(" << std::endl;
+		}
 	}
-
-	return is;
 }
 
-std::ostream& operator<<(std::ostream& os, const Group& ob) {
-	os << "Group name: " << ob.group_name << std::endl;
+void Group::printDoubler() const {
+	std::cout << "List of Doubler students" << std::endl;
+	for (const auto& pos : students) {
+		if (pos.isDoubler() == true) {
+			std::cout << pos << std::endl;
+		}
+		else {
+			std::cout << "Empty :)" << std::endl;
+		}
+	}
+}
 
-	for (const auto& pos : ob.students) {
+std::ostream& operator<<(std::ostream& os, const Group& group) {
+	os << group.group_name << std::endl;
+
+	for (const auto& pos : group.students) {
 		os << pos << std::endl;
 	}
 
 	return os;
+}
+
+std::istream& operator>>(std::istream& is, Group& group) {
+	is >> group.group_name;
+	size_t n = 0;
+	is >> n;
+	for (size_t i = 0; i < n; ++i) {
+		Student temp;
+
+		is >> temp;
+	}
+
+	return is;
 }
