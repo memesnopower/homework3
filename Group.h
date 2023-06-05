@@ -1,25 +1,27 @@
 #ifndef GROUP_H
 #define GROUP_H
 
-#include <unordered_set>
-#include <algorithm>
-#include <iostream>
 #include "Student.h"
+#include <unordered_set>
+#include <iostream>
 
 class Group {
 public:
 	Group();
 	Group(const std::string& group_name);
 
-	void add_student(Student &ob);
-	
-	friend std::istream& operator>>(std::istream& is, Group& ob);
-	friend std::ostream& operator<<(std::ostream& os, const Group& ob);
+	void add_student(const Student& ob);
+	/*void remove_student(const std::string& name);*/
 
+	void printExcellent() const;
+	void printDoubler() const;
+
+	friend std::ostream& operator<<(std::ostream& os, const Group& group);
+	friend std::istream& operator>>(std::istream& is, Group& group);
 private:
 	std::string group_name;
-	std::unordered_set<Student, StudentHasher> students;
+	std::unordered_set<Student, Hasher> students;
 };
 
-#endif // GROUP_H
 
+#endif // GROUP_H
