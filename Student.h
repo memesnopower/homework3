@@ -37,4 +37,10 @@ private:
 	std::vector<Discipline> disciplines;
 };
 
+struct StudentHasher {
+	size_t operator()(const Student& s) const {
+		return std::hash<std::string>()(s.get_name()) ^ std::hash<int>()(s.get_id());
+	}
+};
+
 #endif // STUDENT_H
