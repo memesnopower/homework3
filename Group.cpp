@@ -11,15 +11,72 @@ void Group::add_student(const Student& ob) {
 	this->students.insert(ob);
 }
 
-//void Group::remove_student(const std::string& name) {
-//	for (const auto& pos : students) {
-//		if (pos.get_name() == name) {
-//			students.erase(pos);
-//		}
-//	}
-//}
+void Group::remove_student(const size_t id) {
+
+	bool flag = false;
+	for (const auto& pos : students) {
+		if (pos.get_id() == id) {
+			students.erase(pos);
+			bool flag = true;
+		}
+	}
+
+	if (!flag) {
+		throw StudentNotFoundException();
+	}
+}
+
+void Group::search_name(const std::string& name) const {
+	bool flag = false;
+	for (const auto& pos : students) {
+		if (pos.get_name() == name) {
+			std::cout << "Student found!" << std::endl;
+			std::cout << pos << std::endl;
+			flag = true;
+		}
+	}
+
+	if (!flag) {
+		throw StudentNotFoundException();
+	}
+}
+
+void Group::search_surname(const std::string& surname) const {
+	bool flag = false;
+	for (const auto& pos : students) {
+		if (pos.get_surname() == surname) {
+			std::cout << "Student found!" << std::endl;
+			std::cout << pos << std::endl;
+			flag = true;
+		}
+	}
+
+	if (!flag) {
+		throw StudentNotFoundException();
+	}
+}
+
+void Group::search_patronymic(const std::string& patronymic) const {
+	bool flag = false;
+	for (const auto& pos : students) {
+		if (pos.get_patronymic() == patronymic) {
+			std::cout << "Student found!" << std::endl;
+			std::cout << pos << std::endl;
+			flag = true;
+		}
+	}
+
+	if (!flag) {
+		throw StudentNotFoundException();
+	}
+}
 
 double Group::getAverageMark() const {
+
+	if (students.size() == 0) {
+		throw ZeroDimensionalityException();
+	}
+
 	double total = 0;
 	for (const auto& pos : students) {
 		total += pos.get_average();
@@ -29,8 +86,13 @@ double Group::getAverageMark() const {
 }
 
 double Group::getAverageMarkBySubject(const std::string& subject) const {
+
+	if (students.size() == 0) {
+		throw ZeroDimensionalityException();
+	}
+
 	double total = 0;
-	
+
 	for (const auto& pos : students) {
 		const auto& grades = pos.get_marks();
 		auto it = grades.find(subject);
