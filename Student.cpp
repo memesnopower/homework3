@@ -25,6 +25,25 @@ const size_t Student::get_id() const {
 	return this->id;
 }
 
+
+void Student::set_name(const std::string& name) {
+	this->name = name;
+}
+
+void Student::set_surname(const std::string& surname) {
+	this->surname = surname;
+}
+
+void Student::set_patronymic(const std::string& patronymic) {
+	this->patronymic = patronymic;
+}
+
+void Student::set_marks(const std::map<std::string, size_t>& marks) {
+	this->marks = marks;
+}
+
+
+
 void Student::add_mark(const std::string& subject, size_t mark) {
 	if (mark < 2 || mark > 5) {
 		throw InvalidGradeException();
@@ -68,6 +87,13 @@ bool Student::isDoubler() const {
 	}
 }
 
+bool Student::isSimple() const {
+	if (get_average() > 3 && get_average() < 5) {
+		return true;
+	}
+	return false;
+}
+
 
 
 std::ostream& operator<<(std::ostream& os, const Student& student) {
@@ -79,6 +105,9 @@ std::ostream& operator<<(std::ostream& os, const Student& student) {
 	for (const auto& mark : student.marks) {
 		os << mark.first << " " << mark.second << std::endl;
 	}
+
+	os << "Average: " << std::endl;
+	os << student.get_average() << std::endl;
 
 	return os;
 }
