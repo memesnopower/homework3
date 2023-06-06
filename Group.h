@@ -5,6 +5,8 @@
 #include <unordered_set>
 #include "Exceptions.h"
 #include <memory>
+#include <fstream>
+#include <thread>
 #include <mutex>
 #include <iostream>
 
@@ -19,6 +21,10 @@ public:
 	void search_surname(const std::string& surname) const;
 	void search_patronymic(const std::string& patronymic) const;
 	void search_id(const size_t id) const;
+
+	void readFromFile(std::fstream& is);
+	void writeInFile(std::fstream& os);
+	void clear();
 
 
 	void edit_student_name(const size_t id, const std::string& name);
