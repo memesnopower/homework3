@@ -2,6 +2,8 @@
 #include "Exceptions.h"
 #include <thread>
 
+std::mutex mute;
+
 void showMenu() {
 	std::cout << "=====MENU=====" << std::endl;
 	std::cout << "1 - Add student" << std::endl;
@@ -14,11 +16,21 @@ void showMenu() {
 	std::cout << "8 - View the list of excellent students" << std::endl;
 	std::cout << "9 - View the list of debtors" << std::endl;
 	std::cout << "10 - View the list of regular students" << std::endl;
+	std::cout << "11 - Save to file" << std::endl;
+	std::cout << "12 - Read from file" << std::endl;
 	std::cout << "0 - Exit" << std::endl;
-
-	// Сохранение в файл
-	// Чтение из файла
 }
+
+
+void writeInToFile(Group& group, const std::string& fileName) {
+	mute.lock();
+	std::fstream fout(fileName);
+	group.writeInFile(fout);
+	mute.unlock();
+}
+
+
+
 
 int main() {
 	Group group("IU8-22");
@@ -45,15 +57,10 @@ int main() {
 			std::cout << group;
 			break;
 		case 3:
-			std::cout << "Enter student id: ";
-			std::cin >> id;
-			try {
-				std::thread thread1(Group::remove_student, std::ref(id));
-			}
-			catch (StudentNotFoundException& e) {
-				e.what();
-			}
+		{
+			
 			break;
+		}
 		case 4:
 			std::cout << "Choose which parameter to search for a student by -->" << std::endl;
 			std::cout << "1 - name" << std::endl;
@@ -163,6 +170,20 @@ int main() {
 		case 10:
 			group.printSimple();
 			break;
+		case 11:
+		{
+			std::string fileName;
+			std::cout << "Please enter file name: ";
+			std::cin >> fileName;
+			std::thread t(writeInToFile, std::ref(group), std::ref(fileName));
+			t.join();
+			break;
+		}
+		case 12:
+		{
+			
+			break;
+		}
 		}
 	}
 }
