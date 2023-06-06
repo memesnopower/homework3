@@ -1,6 +1,8 @@
 #include "Group.h"
 #include "Student.h"
 
+std::mutex mute;
+
 Group::Group() = default;
 
 Group::Group(const std::string& group_name) {
@@ -11,19 +13,24 @@ void Group::add_student(const Student& ob) {
 	this->students.insert(ob);
 }
 
-void Group::remove_student(const size_t id) {
+// Фиксануть
 
+void Group::remove_student(const size_t id) {
+	mute.lock();
 	bool flag = false;
 	for (const auto& pos : students) {
 		if (pos.get_id() == id) {
 			students.erase(pos);
-			bool flag = true;
+			flag = true;
 		}
 	}
 
 	if (!flag) {
 		throw StudentNotFoundException();
 	}
+
+	std::cout << "Success!" << std::endl;
+	mute.unlock();
 }
 
 void Group::search_name(const std::string& name) const {
@@ -60,6 +67,21 @@ void Group::search_patronymic(const std::string& patronymic) const {
 	bool flag = false;
 	for (const auto& pos : students) {
 		if (pos.get_patronymic() == patronymic) {
+			std::cout << "Student found!" << std::endl;
+			std::cout << pos << std::endl;
+			flag = true;
+		}
+	}
+
+	if (!flag) {
+		throw StudentNotFoundException();
+	}
+}
+
+void Group::search_id(const size_t id) const {
+	bool flag = false;
+	for (const auto& pos : students) {
+		if (pos.get_id() == id) {
 			std::cout << "Student found!" << std::endl;
 			std::cout << pos << std::endl;
 			flag = true;
@@ -127,6 +149,64 @@ void Group::printDoubler() const {
 		}
 	}
 }
+
+void Group::printSimple() const {
+	std::cout << "List of Regular students" << std::endl;
+	for (const auto& pos : students) {
+		if (pos.isSimple() == true) {
+			std::cout << pos << std::endl;
+		}
+		else {
+			std::cout << "Empty -_-" << std::endl;
+		}
+	}
+}
+
+
+
+void Group::edit_student_name(const size_t id, const std::string& name) {
+	std::unordered_set<Student, Hasher> temp = students;
+	for (const auto& pos : students) {
+		if (pos.get_id() == id) {
+			Student temps(pos);
+			temp.erase(pos);
+			temps.set_name(name);
+			temp.insert(temps);
+		}
+	}
+	students = temp;
+	std::cout << "Success!" << std::endl;
+}
+
+void Group::edit_student_surname(const size_t id, const std::string& surname) {
+	std::unordered_set<Student, Hasher> temp = students;
+	for (const auto& pos : students) {
+		if (pos.get_id() == id) {
+			Student temps(pos);
+			temp.erase(pos);
+			temps.set_surname(surname);
+			temp.insert(temps);
+		}
+	}
+	students = temp;
+	std::cout << "Success!" << std::endl;
+}
+
+void Group::edit_student_patronymic(const size_t id, const std::string& patronymic) {
+	std::unordered_set<Student, Hasher> temp = students;
+	for (const auto& pos : students) {
+		if (pos.get_id() == id) {
+			Student temps(pos);
+			temp.erase(pos);
+			temps.set_surname(patronymic);
+			temp.insert(temps);
+		}
+	}
+	students = temp;
+	std::cout << "Success!" << std::endl;
+}
+
+
 
 std::ostream& operator<<(std::ostream& os, const Group& group) {
 	os << group.group_name << std::endl;
