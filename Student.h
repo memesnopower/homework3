@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "Exceptions.h"
 #include <map>
 
 class Student {
@@ -18,15 +19,6 @@ public:
 	const size_t get_id() const;
 	void add_mark(const std::string& subject, size_t mark);
 	const std::map<std::string, size_t>& get_marks() const;
-
-
-	void set_name(const std::string& name);
-	void set_surname(const std::string& surname);
-	void set_patronymic(const std::string& patronymic);
-	void set_id(const size_t id);
-	void set_marks(const std::map<std::string, size_t>& marks);
-
-
 
 	double get_average() const;
 
