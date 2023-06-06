@@ -1,17 +1,23 @@
 #include "Group.h"
 #include "Exceptions.h"
+#include <thread>
 
 void showMenu() {
 	std::cout << "=====MENU=====" << std::endl;
 	std::cout << "1 - Add student" << std::endl;
 	std::cout << "2 - Show list of students" << std::endl;
-	std::cout << "3 - Remove student" << std::endl;
+	std::cout << "3 - Remove student" << std::endl; // Фиксануть
 	std::cout << "4 - Search student" << std::endl;
-	std::cout << "5 - View the GPA in all subjects for the whole group" << std::endl;
-	std::cout << "6 - View the GPA in a particular subject for the whole group" << std::endl;
-	std::cout << "7 - View the list of excellent students" << std::endl;
-	std::cout << "8 - View the list of debtors" << std::endl;
+	std::cout << "5 - Edit student" << std::endl;
+	std::cout << "6 - View the GPA in all subjects for the whole group" << std::endl;
+	std::cout << "7 - View the GPA in a particular subject for the whole group" << std::endl;
+	std::cout << "8 - View the list of excellent students" << std::endl;
+	std::cout << "9 - View the list of debtors" << std::endl;
+	std::cout << "10 - View the list of regular students" << std::endl;
 	std::cout << "0 - Exit" << std::endl;
+
+	// Сохранение в файл
+	// Чтение из файла
 }
 
 int main() {
@@ -25,6 +31,7 @@ int main() {
 	while (!flag) {
 		showMenu();
 		int choice = 0;
+		int choice2 = 0;
 		std::cin >> choice;
 		switch (choice) {
 		case 0:
@@ -41,7 +48,7 @@ int main() {
 			std::cout << "Enter student id: ";
 			std::cin >> id;
 			try {
-				group.remove_student(id);
+				std::thread thread1(Group::remove_student, std::ref(id));
 			}
 			catch (StudentNotFoundException& e) {
 				e.what();
@@ -52,6 +59,7 @@ int main() {
 			std::cout << "1 - name" << std::endl;
 			std::cout << "2 - surname" << std::endl;
 			std::cout << "3 - patronymic" << std::endl;
+			std::cout << "4 - id" << std::endl;
 
 			std::cin >> choice1;
 
@@ -86,9 +94,49 @@ int main() {
 					e.what();
 				}
 				break;
+			case 4:
+				std::cout << "Enter student id: ";
+				std::cin >> id;
+				try {
+					group.search_id(id);
+				}
+				catch (StudentNotFoundException& e) {
+					e.what();
+				}
+				break;
 			}
 			break;
 		case 5:
+			std::cout << "Select what you want to edit -->" << std::endl;
+			std::cout << "1 - Student name" << std::endl;
+			std::cout << "2 - Student surname" << std::endl;
+			std::cout << "3 - Student patronymic" << std::endl;
+			std::cin >> choice2;
+			switch (choice2) {
+			case 1:
+				std::cout << "Enter student id: " << std::endl;
+				std::cin >> id;
+				std::cout << "Enter new student name: " << std::endl;
+				std::cin >> name;
+				group.edit_student_name(id, name);
+				break;
+			case 2:
+				std::cout << "Enter student id: " << std::endl;
+				std::cin >> id;
+				std::cout << "Enter new student surname: " << std::endl;
+				std::cin >> surname;
+				group.edit_student_surname(id, surname);
+				break;
+			case 3:
+				std::cout << "Enter student id: " << std::endl;
+				std::cin >> id;
+				std::cout << "Enter new student patronymic: " << std::endl;
+				std::cin >> patronymic;
+				group.edit_student_patronymic(id, patronymic);
+				break;
+			}
+			break;
+		case 6:
 			try {
 				std::cout << group.getAverageMark();
 			}
@@ -96,7 +144,7 @@ int main() {
 				e.what();
 			}
 			break;
-		case 6:
+		case 7:
 			std::cout << "Enter subject: ";
 			std::cin >> subject;
 			try {
@@ -106,11 +154,14 @@ int main() {
 				e.what();
 			}
 			break;
-		case 7:
+		case 8:
 			group.printExcellent();
 			break;
-		case 8:
+		case 9:
 			group.printDoubler();
+			break;
+		case 10:
+			group.printSimple();
 			break;
 		}
 	}
