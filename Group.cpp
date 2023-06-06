@@ -1,7 +1,6 @@
 #include "Group.h"
 #include "Student.h"
 
-std::mutex mute;
 
 Group::Group() = default;
 
@@ -13,24 +12,24 @@ void Group::add_student(const Student& ob) {
 	this->students.insert(ob);
 }
 
-// Фиксануть
 
 void Group::remove_student(const size_t id) {
-	mute.lock();
+	std::unordered_set<Student, Hasher> temp = students;
 	bool flag = false;
 	for (const auto& pos : students) {
 		if (pos.get_id() == id) {
-			students.erase(pos);
+			temp.erase(pos);
 			flag = true;
 		}
 	}
+
+	students = temp;
 
 	if (!flag) {
 		throw StudentNotFoundException();
 	}
 
 	std::cout << "Success!" << std::endl;
-	mute.unlock();
 }
 
 void Group::search_name(const std::string& name) const {
@@ -47,6 +46,22 @@ void Group::search_name(const std::string& name) const {
 		throw StudentNotFoundException();
 	}
 }
+
+void Group::readFromFile(std::fstream& is) {
+	this->clear();
+	is >> *this;
+	is.close();
+}
+
+void Group::writeInFile(std::fstream& os){
+	os << *this;
+	os.close();
+}
+
+void Group::clear() {
+	students.clear();
+}
+
 
 void Group::search_surname(const std::string& surname) const {
 	bool flag = false;
@@ -226,6 +241,7 @@ std::istream& operator>>(std::istream& is, Group& group) {
 		Student temp;
 
 		is >> temp;
+		group.add_student(temp);
 	}
 
 	return is;
