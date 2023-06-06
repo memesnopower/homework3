@@ -20,13 +20,20 @@ public:
 	void add_mark(const std::string& subject, size_t mark);
 	const std::map<std::string, size_t>& get_marks() const;
 
-	double get_average() const;
+	void set_name(const std::string& name);
+	void set_surname(const std::string& surname);
+	void set_patronymic(const std::string& patronymic);
+	void set_marks(const std::map<std::string, size_t>& marks);
 
+
+	double get_average() const;
 	bool isExcellent() const;
 	bool isDoubler() const;
+	bool isSimple() const;
 
 	friend std::ostream& operator<<(std::ostream& os, const Student& student);
 	friend std::istream& operator>>(std::istream& is, Student& student);
+	
 
 private:
 	std::string name;
@@ -48,6 +55,5 @@ struct Hasher {
 		return (pow(coef, 3) * strHash(ob.get_name()) + pow(coef, 2) * strHash(ob.get_surname()) + coef * strHash(ob.get_patronymic()) + stHash(ob.get_id()));
 	}
 };
-
 
 #endif // STUDENT_H
