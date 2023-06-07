@@ -22,10 +22,6 @@ public:
 	void search_patronymic(const std::string& patronymic) const;
 	void search_id(const size_t id) const;
 
-	void readFromFile(std::fstream& is);
-	void writeInFile(std::fstream& os);
-	void clear();
-
 
 	void edit_student_name(const size_t id, const std::string& name);
 	void edit_student_surname(const size_t id, const std::string& surname);
