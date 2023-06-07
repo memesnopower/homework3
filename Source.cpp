@@ -21,11 +21,28 @@ void showMenu() {
 	std::cout << "0 - Exit" << std::endl;
 }
 
+void removeStudent(Group& group, const size_t id) {
+	mute.lock();
+	try {
+		group.remove_student(id);
+	}
+	catch (StudentNotFoundException& e) {
+		e.what();
+	}
+	mute.unlock();
+}
 
 void writeInToFile(Group& group, const std::string& fileName) {
 	mute.lock();
 	std::fstream fout(fileName);
-	group.writeInFile(fout);
+	fout << group;
+	mute.unlock();
+}
+
+void readFromFile(Group& group, const std::string& fileName) {
+	mute.lock();
+	std::fstream fin(fileName);
+	fin >> group;
 	mute.unlock();
 }
 
@@ -58,7 +75,10 @@ int main() {
 			break;
 		case 3:
 		{
-			
+			std::cout << "Enter student id: ";
+			std::cin >> id;
+			std::thread t(removeStudent, std::ref(group), std::ref(id));
+			t.join();
 			break;
 		}
 		case 4:
@@ -181,7 +201,11 @@ int main() {
 		}
 		case 12:
 		{
-			
+			std::string fileName;
+			std::cout << "Please enter file name: ";
+			std::cin >> fileName;
+			std::thread t(readFromFile, std::ref(group), std::ref(fileName));
+			t.join();
 			break;
 		}
 		}
