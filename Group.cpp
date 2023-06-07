@@ -47,22 +47,6 @@ void Group::search_name(const std::string& name) const {
 	}
 }
 
-void Group::readFromFile(std::fstream& is) {
-	this->clear();
-	is >> *this;
-	is.close();
-}
-
-void Group::writeInFile(std::fstream& os){
-	os << *this;
-	os.close();
-}
-
-void Group::clear() {
-	students.clear();
-}
-
-
 void Group::search_surname(const std::string& surname) const {
 	bool flag = false;
 	for (const auto& pos : students) {
